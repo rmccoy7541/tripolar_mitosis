@@ -505,7 +505,7 @@ ggplot(data = combined_counts, aes(x = count, y = set, fill = set)) +
 ########################################
 
 # import time-lapse data
-duc <- fread("~/tripolar_mitosis/duc.csv") %>%
+duc <- fread("https://raw.githubusercontent.com/rmccoy7541/tripolar_mitosis/master/data/duc.csv") %>%
   setnames(., c("DUC", "case"))
 duc <- duc[case != "missing"]
 duc[, case := as.integer(case)]
@@ -539,7 +539,7 @@ geno[V7 == "A" & V8 == "A", gt := 2]
 duc_summary <- merge(duc_summary, geno, "case")
 
 # import king-inferred repeat cases
-king <- fread("~/tripolar_mitosis/king.txt", header = F) %>%
+king <- fread("https://raw.githubusercontent.com/rmccoy7541/tripolar_mitosis/master/data/king.txt", header = F) %>%
   setnames(., c("case", "king"))
 
 duc_summary <- merge(duc_summary, king, "case")
