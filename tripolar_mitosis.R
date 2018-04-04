@@ -471,7 +471,7 @@ chaotic_melt[, set := "Observed"]
 simulated_tripolar_melt[, set := "Simulated"]
 
 combined_data <- rbind(chaotic_melt, simulated_tripolar_melt)
-combined_data$set <- factor(combined_data$set, levels=c("Simulated", "Observed"))
+combined_data$set <- factor(combined_data$set, levels = c("Simulated", "Observed"))
 
 ggplot(data = combined_data, aes(x = value, y = variable, fill = variable)) +
   geom_joy(stat = "binline", binwidth = 1, scale = 0.9) +
@@ -480,16 +480,12 @@ ggplot(data = combined_data, aes(x = value, y = variable, fill = variable)) +
   theme_joy() +
   theme(legend.position = "none")
 
-# replicated genome
-initial_chroms <- 46 * 2
-
-sim_counts <- rmultinom(10000, initial_chroms, rep(1/3, 3))[1,]
-sim_counts <- data.table(count = sim_counts, set = "Simulated")
-
+simulated_tripolar[, count := nullisomy * 0 + m_monosomy + p_monosomy + disomy * 2]
+simulated_tripolar[, set := "Simulated"]
 obs_counts <- data[case_embryoid %in% diploid_tripolar]$chrom_count
 obs_counts <- data.table(count = obs_counts, set = "Observed")
 
-combined_counts <- rbind(sim_counts, obs_counts)
+combined_counts <- rbind(simulated_tripolar[, c("count", "set")], obs_counts)
 combined_counts$set <- factor(combined_counts$set, levels=c("Simulated", "Observed"))
   
 ggplot(data = combined_counts, aes(x = count, y = set, fill = set)) +
